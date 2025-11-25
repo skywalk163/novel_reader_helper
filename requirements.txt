@@ -1,0 +1,26 @@
+# 小说阅读神器依赖包列表
+# v1.1 - 包含浏览器功能支持
+
+# 基础功能依赖
+jieba>=0.42.0                    # 中文分词和关键词提取
+Pillow>=10.0.0                   # 图片处理和预览
+
+# OCR功能依赖（可选，需要单独启动服务）
+paddleocr>=2.7.0                 # OCR文字识别
+paddlepaddle>=2.5.0              # PaddlePaddle深度学习框架
+numpy>=1.24.0                    # 数值计算
+opencv-python>=4.8.0             # 计算机视觉
+
+# 浏览器功能依赖
+PyQt5>=5.15.0                    # GUI框架
+PyQtWebEngine>=5.15.0            # 网页浏览器引擎
+
+# 网页处理依赖
+beautifulsoup4>=4.12.0           # HTML解析
+requests>=2.31.0                 # HTTP请求
+
+# 建议安装命令：
+# pip install jieba Pillow PyQt5 PyQtWebEngine beautifulsoup4 requests
+# 
+# OCR功能（可选）：
+# pip install paddleocr paddlepaddle numpy opencv-python

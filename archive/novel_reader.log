@@ -1,0 +1,221 @@
+2025-11-23 12:12:58,366 - ERROR - An error occurred: 'NovelBrowser' object has no attribute 'web_view'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 103, in initialize_browser
+    self.browser_window = create_browser_window(None)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 586, in create_browser_window
+    return NovelBrowser(parent)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 88, in __init__
+    self.setup_ui()
+  File "E:\comatework\novel_reader_helper\browser.py", line 116, in setup_ui
+    self.create_address_bar()
+  File "E:\comatework\novel_reader_helper\browser.py", line 193, in create_address_bar
+    self.create_navigation_actions()
+  File "E:\comatework\novel_reader_helper\browser.py", line 148, in create_navigation_actions
+    self.back_action.triggered.connect(self.web_view.back)
+                                       ^^^^^^^^^^^^^
+AttributeError: 'NovelBrowser' object has no attribute 'web_view'
+
+2025-11-23 12:12:58,412 - ERROR - An error occurred: 'NovelReaderMain' object has no attribute 'create_browser_bar'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 93, in __init__
+    self.setup_ui()
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 214, in setup_ui
+    self.create_browser_bar(main_frame)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NovelReaderMain' object has no attribute 'create_browser_bar'
+
+2025-11-23 12:13:30,146 - ERROR - An error occurred: 'NovelBrowser' object has no attribute 'web_view'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 103, in initialize_browser
+    self.browser_window = create_browser_window(None)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 586, in create_browser_window
+    return NovelBrowser(parent)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 88, in __init__
+    self.setup_ui()
+  File "E:\comatework\novel_reader_helper\browser.py", line 116, in setup_ui
+    self.create_address_bar()
+  File "E:\comatework\novel_reader_helper\browser.py", line 193, in create_address_bar
+    self.create_navigation_actions()
+  File "E:\comatework\novel_reader_helper\browser.py", line 148, in create_navigation_actions
+    self.back_action.triggered.connect(self.web_view.back)
+                                       ^^^^^^^^^^^^^
+AttributeError: 'NovelBrowser' object has no attribute 'web_view'
+
+2025-11-23 12:13:30,201 - ERROR - An error occurred: 'NovelReaderMain' object has no attribute 'create_browser_bar'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 93, in __init__
+    self.setup_ui()
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 214, in setup_ui
+    self.create_browser_bar(main_frame)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NovelReaderMain' object has no attribute 'create_browser_bar'
+
+2025-11-23 12:25:39,841 - ERROR - An error occurred: 'NovelBrowser' object has no attribute 'web_view'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 103, in initialize_browser
+    self.browser_window = create_browser_window(None)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 586, in create_browser_window
+    return NovelBrowser(parent)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 88, in __init__
+    self.setup_ui()
+  File "E:\comatework\novel_reader_helper\browser.py", line 116, in setup_ui
+    self.create_address_bar()
+  File "E:\comatework\novel_reader_helper\browser.py", line 193, in create_address_bar
+    self.create_navigation_actions()
+  File "E:\comatework\novel_reader_helper\browser.py", line 148, in create_navigation_actions
+    self.back_action.triggered.connect(self.web_view.back)
+                                       ^^^^^^^^^^^^^
+AttributeError: 'NovelBrowser' object has no attribute 'web_view'
+
+2025-11-23 12:30:57,623 - ERROR - An error occurred: 'NovelBrowser' object has no attribute 'web_view'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 104, in initialize_browser
+    self.browser_window = create_browser_window(None)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 586, in create_browser_window
+    return NovelBrowser(parent)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 88, in __init__
+    self.setup_ui()
+  File "E:\comatework\novel_reader_helper\browser.py", line 116, in setup_ui
+    self.create_address_bar()
+  File "E:\comatework\novel_reader_helper\browser.py", line 193, in create_address_bar
+    self.create_navigation_actions()
+  File "E:\comatework\novel_reader_helper\browser.py", line 148, in create_navigation_actions
+    self.back_action.triggered.connect(self.web_view.back)
+                                       ^^^^^^^^^^^^^
+AttributeError: 'NovelBrowser' object has no attribute 'web_view'
+
+2025-11-23 13:33:00,812 - ERROR - An error occurred: name 'QMenu' is not defined
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 104, in initialize_browser
+    self.browser_window = create_browser_window(None)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 588, in create_browser_window
+    return NovelBrowser(parent)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 88, in __init__
+    self.setup_ui()
+  File "E:\comatework\novel_reader_helper\browser.py", line 121, in setup_ui
+    self.create_address_bar()
+  File "E:\comatework\novel_reader_helper\browser.py", line 259, in create_address_bar
+    sites_menu = self.create_sites_menu()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 265, in create_sites_menu
+    sites_menu = QMenu(self)
+                 ^^^^^
+NameError: name 'QMenu' is not defined
+
+2025-11-23 14:52:53,601 - ERROR - An error occurred: 'QWebEngineHistory' object has no attribute 'canGoBackChanged'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 104, in initialize_browser
+    self.browser_window = create_browser_window(None)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 588, in create_browser_window
+    return NovelBrowser(parent)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 99, in __init__
+    self.connect_signals()
+  File "E:\comatework\novel_reader_helper\browser.py", line 294, in connect_signals
+    self.web_view.page().history().canGoBackChanged.connect(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'QWebEngineHistory' object has no attribute 'canGoBackChanged'
+
+2025-11-23 15:30:31,498 - ERROR - An error occurred: 'QWebEngineHistory' object has no attribute 'canGoBackChanged'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 104, in initialize_browser
+    self.browser_window = create_browser_window(None)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 588, in create_browser_window
+    return NovelBrowser(parent)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\comatework\novel_reader_helper\browser.py", line 99, in __init__
+    self.connect_signals()
+  File "E:\comatework\novel_reader_helper\browser.py", line 294, in connect_signals
+    self.web_view.page().history().canGoBackChanged.connect(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'QWebEngineHistory' object has no attribute 'canGoBackChanged'
+
+2025-11-23 15:40:04,882 - ERROR - An error occurred: 'NovelReaderMain' object has no attribute 'status_var'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 1077, in navigate_to_address
+    self.status_var.set(f"正在加载: {url_text}")
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NovelReaderMain' object has no attribute 'status_var'
+
+2025-11-23 15:40:09,967 - ERROR - An error occurred: 'NovelReaderMain' object has no attribute 'status_var'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 1077, in navigate_to_address
+    self.status_var.set(f"正在加载: {url_text}")
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NovelReaderMain' object has no attribute 'status_var'
+
+2025-11-23 15:44:44,094 - ERROR - An error occurred: 'NovelReaderMain' object has no attribute 'status_var'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 1077, in navigate_to_address
+    self.status_var.set(f"正在加载: {url_text}")
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NovelReaderMain' object has no attribute 'status_var'
+
+2025-11-23 17:00:55,732 - ERROR - An error occurred: 'NovelReaderMain' object has no attribute 'status_var'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 1080, in navigate_to_address
+    self.status_var.set(f"正在加载: {url_text}")
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NovelReaderMain' object has no attribute 'status_var'
+
+2025-11-23 17:01:51,620 - ERROR - An error occurred: 'NovelReaderMain' object has no attribute 'status_var'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 1080, in navigate_to_address
+    self.status_var.set(f"正在加载: {url_text}")
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NovelReaderMain' object has no attribute 'status_var'
+
+2025-11-23 21:56:44,858 - DEBUG - Building prefix dict from the default dictionary ...
+2025-11-23 21:56:44,860 - DEBUG - Loading model from cache C:\Users\Admin\AppData\Local\Temp\jieba.cache
+2025-11-23 21:56:45,760 - DEBUG - Loading model cost 0.902 seconds.
+2025-11-23 21:56:45,761 - DEBUG - Prefix dict has been built successfully.
+2025-11-23 23:14:07,309 - DEBUG - Building prefix dict from the default dictionary ...
+2025-11-23 23:14:07,311 - DEBUG - Loading model from cache C:\Users\Admin\AppData\Local\Temp\jieba.cache
+2025-11-23 23:14:08,271 - DEBUG - Loading model cost 0.962 seconds.
+2025-11-23 23:14:08,272 - DEBUG - Prefix dict has been built successfully.
+2025-11-24 00:03:56,264 - ERROR - An error occurred: 'NoneType' object has no attribute 'setEnabled'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\browser.py", line 447, in extract_page_content
+    self.extract_content_action.setEnabled(False)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'setEnabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 1265, in extract_browser_content
+    self.browser_window.extract_page_content()
+  File "E:\comatework\novel_reader_helper\browser.py", line 452, in extract_page_content
+    self.extract_content_action.setEnabled(True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'setEnabled'
+
+2025-11-24 00:03:59,882 - ERROR - An error occurred: 'NoneType' object has no attribute 'setEnabled'
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\browser.py", line 447, in extract_page_content
+    self.extract_content_action.setEnabled(False)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'setEnabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\comatework\novel_reader_helper\main_simple.py", line 1265, in extract_browser_content
+    self.browser_window.extract_page_content()
+  File "E:\comatework\novel_reader_helper\browser.py", line 452, in extract_page_content
+    self.extract_content_action.setEnabled(True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'setEnabled'
+
