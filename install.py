@@ -45,7 +45,8 @@ def install_requirements(mode="quick"):
         "Pillow>=10.0.0,<12.0.0",  # OCR需要Pillow进行图片处理
         "opencv-python>=4.8.0",
         "paddlepaddle>=2.5.0",
-        "paddleocr>=2.7.0"
+        "paddleocr>=2.7.0",
+        "flask>=2.3.3"
     ]
     
     # 根据模式选择要安装的依赖
@@ -247,8 +248,10 @@ def main():
     else:
         print("\n📝 OCR服务使用说明：")
         print("   1. 打开新的终端窗口")
-        print("   2. 导航到paddleocrapp目录: cd paddleocrapp")
-        print("   3. 启动OCR服务: python app.py")
+        print("   2. 导航到paddleocr目录: cd paddleocr")
+        print("   3. 启动OCR服务:")
+        print("      - Windows: start_service.bat")
+        print("      - Linux/Mac: python app.py 或 ./start_service.sh")
         print("   4. 保持OCR服务终端窗口运行（不要关闭）")
     
     print("\n📖 使用方法：")

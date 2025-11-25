@@ -984,12 +984,22 @@ class NovelBrowser(QMainWindow):
                 response = requests.get("http://127.0.0.1:5000/status", timeout=3)
                 if response.status_code != 200:
                     self.show_warning("OCR服务不可用，请确保PaddleOCR服务正在运行")
+                    self.ocr_images_action.setEnabled(True)
                     return
             except requests.RequestException:
                 self.show_warning("无法连接到OCR服务，请确保服务已启动")
+                self.status_label.setText("❌ OCR服务未连接")
+                self.show_info("请按以下步骤启动OCR服务:\n1. 打开新的终端窗口\n2. 导航到paddleocr目录: cd paddleocr\n3. 启动OCR服务: python app.py")
+                self.ocr_images_action.setEnabled(True)
                 return
                 
-            self.get_page_content(self._process_images_for_ocr)
+            # 使用安全的方式获取页面内容
+            try:
+                self.get_page_content(self._process_images_for_ocr)
+            except Exception as e:
+                self.show_error(f"获取页面内容失败: {str(e)}")
+                self.status_label.setText("❌ 页面内容获取失败")
+                self.ocr_images_action.setEnabled(True)
             
         except Exception as e:
             self.show_error(f"启动图片识别失败: {str(e)}")
@@ -1003,13 +1013,28 @@ class NovelBrowser(QMainWindow):
         
         try:
             current_url = self.web_view.url().toString()
-            images = self.web_extractor.extract_images(html, current_url)
+            
+            # 安全检查html内容
+            if not html:
+                self.show_warning("页面内容为空，无法提取图片")
+                self.status_label.setText("❌ 页面内容为空")
+                self.ocr_images_action.setEnabled(True)
+                return
+                
+            try:
+                images = self.web_extractor.extract_images(html, current_url)
+            except Exception as e:
+                self.show_error(f"提取图片信息失败: {str(e)}")
+                self.status_label.setText("❌ 图片提取失败")
+                self.ocr_images_action.setEnabled(True)
+                return
             
             if not images:
                 self.show_info("当前页面未发现可识别的图片")
                 self.status_label.setText("ℹ️ 未发现图片")
+                self.ocr_images_action.setEnabled(True)
                 return
-                
+                    
             self.status_label.setText(f"发现 {len(images)} 张图片，开始处理...")
             ocr_results = []
             
@@ -1099,6 +1124,12 @@ class NovelBrowser(QMainWindow):
     def get_page_content(self, callback):
         """获取页面内容（异步）- 增强版，支持动态内容"""
         def handle_result(html):
+            # 处理None值或空字符串
+            if html is None or not html:
+                print("警告: 获取到的HTML内容为空")
+                callback("")
+                return
+                
             # 如果HTML内容过短，尝试执行JavaScript获取更多内容
             if len(html) < 1000:
                 self.execute_javascript_and_get_content(callback, html)
@@ -1173,6 +1204,12 @@ class NovelBrowser(QMainWindow):
         
         def js_callback(result):
             try:
+                # 处理None值情况
+                if result is None:
+                    print("警告: JavaScript返回了None值")
+                    callback(fallback_html)
+                    return
+                    
                 # 尝试解析JSON结果
                 parsed_result = json.loads(result)
                 if isinstance(parsed_result, dict) and 'content' in parsed_result:
@@ -1184,9 +1221,9 @@ class NovelBrowser(QMainWindow):
                 else:
                     # 如果不是预期的JSON格式，返回原始HTML
                     callback(result if len(str(result)) > len(fallback_html) else fallback_html)
-            except json.JSONDecodeError:
-                # 如果不是JSON，返回原始HTML
-                callback(result if len(str(result)) > len(fallback_html) else fallback_html)
+            except (json.JSONDecodeError, TypeError):
+                # 如果不是JSON或发生类型错误，返回原始HTML
+                callback(fallback_html)
         
         self.web_view.page().runJavaScript(js_script, js_callback)
     
@@ -1378,7 +1415,7 @@ class NovelBrowser(QMainWindow):
         text_edit.setReadOnly(True)
         preview_text = content.get('text', '')[:500]
         if len(content.get('text', '')) > 500:
-            preview_text += "\n\n... (点击"查看完整内容"查看全文)"
+            preview_text += "\n\n... (点击\"查看完整内容\"查看全文)"
         text_edit.setPlainText(preview_text)
         layout.addWidget(text_edit)
 
