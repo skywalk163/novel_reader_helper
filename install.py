@@ -39,6 +39,7 @@ def install_requirements(mode="quick"):
         "requests>=2.28.0",
         "beautifulsoup4>=4.11.0",
         "jieba>=0.42.1",
+        "PyQt5-sip"
     ]
     
     # OCR相关依赖（仅完整安装）
