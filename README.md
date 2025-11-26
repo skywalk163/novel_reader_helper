@@ -40,7 +40,7 @@
 ## 快速开始
 先下载源代码
 
-​```bash
+```bash
 git clone https://gitcode.com/skywalk163/novel_reader_helper
 cd novel_reader_helper
 ```
