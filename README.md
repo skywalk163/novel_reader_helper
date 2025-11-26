@@ -171,6 +171,13 @@ pip install PyQt5 PyQtWebEngine
 - 支持自定义总结规则
 - 多种总结风格选择
 
+### Q5: 有些linux系统报错
+报错信息：
+libGL error: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+libGL error: failed to load driver: swrast
+
+**A**: 这个错误是因为程序需要 OpenGL 渲染环境和图形显示支持，但在当前环境（可能是无界面的服务器或容器）中不可用。当前版本未解决。
+
 ## 开发计划
 
 ### 近期计划
