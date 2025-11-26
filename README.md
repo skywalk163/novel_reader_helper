@@ -205,6 +205,7 @@ libGL error: failed to load driver: swrast
 - [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) - 跨平台GUI框架
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) - 强大的OCR工具
 - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) - HTML解析库
+- [文心快码Comate](https://comate.baidu.com/zh) - 智能代码助手
 
 ---
 
