@@ -92,5 +92,5 @@ def test_ocr_image(image_path):
 
 if __name__ == "__main__":
     # 测试图片路径
-    image_path = r"E:\comatework\novel_reader_helper\test.png"
+    image_path = r"E:\comatework\novel_reader_helper\test\ocrtest.png"
     test_ocr_image(image_path)

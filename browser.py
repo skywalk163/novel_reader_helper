@@ -386,7 +386,7 @@ class NovelBrowser(QMainWindow):
                 self,
                 "打开文件",
                 "",
-                "网页文件 (*.html *.htm *.mhtml *.mht);;所有文件 (*)"
+                "网页文件 (*.html *.htm *.mhtml *.mht *.png *.jpg *.jpeg *.gif *.bmp);;所有文件 (*)"
             )
             if file_path:
                 self.load_url(QUrl.fromLocalFile(file_path))
@@ -1037,6 +1037,7 @@ class NovelBrowser(QMainWindow):
                     
             self.status_label.setText(f"发现 {len(images)} 张图片，开始处理...")
             ocr_results = []
+            all_ocr_text = ""
             
             for i, img in enumerate(images, 1):
                 try:
@@ -1044,50 +1045,84 @@ class NovelBrowser(QMainWindow):
                     self.status_label.setText(f"正在处理第 {i}/{len(images)} 张图片...")
                     self.operation_counter.setText(f"{i}/{len(images)}")
                     
-                    # 下载图片
-                    img_response = requests.get(img['url'], headers=self.web_extractor.headers, timeout=10)
-                    if img_response.status_code != 200:
-                        continue
+                    # 判断是本地文件还是网络图片
+                    img_url = img['url']
+                    if img_url.startswith('file://'):
+                        # 本地文件，直接使用路径
+                        from urllib.parse import unquote
+                        from urllib.request import url2pathname
+                        local_path = url2pathname(unquote(img_url[7:]))  # 移除 file:// 前缀
                         
-                    img_content = img_response.content
-                    if len(img_content) < 1024:  # 图片太小，跳过
-                        continue
+                        # 检查文件是否存在
+                        if not os.path.exists(local_path):
+                            print(f"本地图片文件不存在: {local_path}")
+                            continue
                         
-                    with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as temp_img:
-                        temp_img.write(img_content)
-                        temp_img_path = temp_img.name
+                        # 检查文件大小
+                        if os.path.getsize(local_path) < 1024:
+                            print(f"图片文件太小，跳过: {local_path}")
+                            continue
+                        
+                        temp_img_path = local_path
+                        is_temp_file = False
+                    else:
+                        # 网络图片，需要下载
+                        img_response = requests.get(img_url, headers=self.web_extractor.headers, timeout=10)
+                        if img_response.status_code != 200:
+                            continue
+                            
+                        img_content = img_response.content
+                        if len(img_content) < 1024:  # 图片太小，跳过
+                            continue
+                            
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as temp_img:
+                            temp_img.write(img_content)
+                            temp_img_path = temp_img.name
+                        is_temp_file = True
 
                     # 调用OCR服务
                     ocr_url = "http://127.0.0.1:5000/ocr"
-                    with open(temp_img_path, 'rb') as img_file:
-                        response = requests.post(ocr_url, files={"image": img_file}, timeout=30)
-                    
-                    if response.status_code == 200:
-                        ocr_result = response.json()
-                        ocr_text = ""
-                        
-                        # 处理不同格式的OCR返回结果
-                        if ocr_result.get("status") == "success" or ocr_result.get("success", False):
-                            if "results" in ocr_result:
-                                ocr_text = "\n".join([item.get("text", "") for item in ocr_result["results"]])
-                            elif "data" in ocr_result:
-                                ocr_text = "\n".join([item.get("text", "") for item in ocr_result["data"]])
-                            elif "text" in ocr_result:
-                                ocr_text = ocr_result["text"]
-                                
-                        if ocr_text.strip():
-                            ocr_results.append({
-                                'image_url': img['url'],
-                                'ocr_text': ocr_text.strip(),
-                                'confidence': ocr_result.get('confidence', 0)
-                            })
-                            success_count += 1
-
-                    # 删除临时文件
                     try:
-                        os.unlink(temp_img_path)
-                    except:
-                        pass
+                        with open(temp_img_path, 'rb') as img_file:
+                            # 注意：POST请求参数名从"image"改为"file"，与服务端匹配
+                            response = requests.post(ocr_url, files={"file": img_file}, timeout=60)
+                        
+                        if response.status_code == 200:
+                            ocr_result = response.json()
+                            ocr_text = ""
+                            
+                            # 处理不同格式的OCR返回结果
+                            if ocr_result.get("status") == "success" or ocr_result.get("success", False):
+                                if "results" in ocr_result:
+                                    # 确保results是列表并且包含text字段
+                                    results = ocr_result["results"]
+                                    if isinstance(results, list):
+                                        ocr_text = "\n".join([item.get("text", "") for item in results if isinstance(item, dict)])
+                                elif "data" in ocr_result:
+                                    data = ocr_result["data"]
+                                    if isinstance(data, list):
+                                        ocr_text = "\n".join([item.get("text", "") for item in data if isinstance(item, dict)])
+                                elif "text" in ocr_result:
+                                    ocr_text = str(ocr_result["text"])
+                                    
+                            if ocr_text.strip():
+                                ocr_results.append({
+                                    'image_url': img['url'],
+                                    'ocr_text': ocr_text.strip(),
+                                    'confidence': ocr_result.get('confidence', 0)
+                                })
+                                all_ocr_text += ocr_text.strip() + "\n\n"
+                                success_count += 1
+                    except requests.RequestException as req_err:
+                        print(f"OCR请求失败: {req_err}")
+                        continue
+
+                    # 删除临时文件（仅删除网络下载的临时文件）
+                    if is_temp_file:
+                        try:
+                            os.unlink(temp_img_path)
+                        except:
+                            pass
                         
                 except Exception as img_error:
                     print(f"处理图片 {i} 时出错: {img_error}")
@@ -1097,14 +1132,17 @@ class NovelBrowser(QMainWindow):
             try:
                 content = self.web_extractor.extract_text(html)
                 combined_result = {
-                    'text_content': content,
-                    'ocr_results': ocr_results
+                    'title': '图片OCR识别结果',
+                    'text': all_ocr_text,
+                    'ocr_results': ocr_results,
+                    'url': current_url,
+                    'word_count': len(all_ocr_text)
                 }
                 
                 if success_count > 0:
                     self.content_extracted.emit(combined_result)
                     self.status_label.setText(f"✅ 图片识别完成 - 成功识别 {success_count}/{processed_count} 张图片")
-                    self.show_info(f"图片OCR识别完成！\n处理图片数: {processed_count}\n成功识别: {success_count}\n识别内容已添加到文本区域")
+                    self.show_extracted_content_dialog(combined_result)
                 else:
                     self.show_warning(f"图片识别完成，但未识别出文字内容\n处理了 {processed_count} 张图片")
                     self.status_label.setText(f"⚠️ 未识别出文字 - 已处理 {processed_count} 张图片")
@@ -1119,6 +1157,9 @@ class NovelBrowser(QMainWindow):
         finally:
             self.ocr_images_action.setEnabled(True)
             self.operation_counter.setText("")
+            
+        # 保存最后提取的内容，以便进行AI总结
+        self.last_extracted_content = combined_result
 
         
     def get_page_content(self, callback):

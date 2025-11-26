@@ -133,5 +133,5 @@ def test_ocr_post(image_path):
 
 if __name__ == "__main__":
     # 测试图片路径
-    image_path = r"E:\comatework\novel_reader_helper\水浒ocr测试.png"
+    image_path = r"E:\comatework\novel_reader_helper\test\ocrtest.png"
     test_ocr_post(image_path)
