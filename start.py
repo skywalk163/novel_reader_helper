@@ -27,7 +27,8 @@ def run_installation():
 def start_application():
     """启动应用程序"""
     print("正在启动小说阅读神器...")
-    subprocess.call([sys.executable, "main.py"])
+    # subprocess.call([sys.executable, "main.py"])
+    subprocess.call([sys.executable, "browser.py"])
 
 if __name__ == "__main__":
     print("=" * 50)

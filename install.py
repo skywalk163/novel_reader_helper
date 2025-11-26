@@ -33,7 +33,9 @@ def install_requirements(mode="quick"):
     # 基础依赖包（必须安装）
     basic_requirements = [
         "PyQt5>=5.15.0",
+        "PyQt5_qt5>=5.15.0",
         "PyQtWebEngine>=5.15.0",
+        "PyQtWebEngine-Qt5>=5.15.0,<5.16.0",
         "requests>=2.28.0",
         "beautifulsoup4>=4.11.0",
         "jieba>=0.42.1",
