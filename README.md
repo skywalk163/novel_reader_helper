@@ -38,6 +38,13 @@
 - **浏览器内核**：PyQt5 WebEngine (Chromium内核)
 
 ## 快速开始
+先下载源代码
+​```bash
+git clone https://gitcode.com/skywalk163/novel_reader_helper
+cd novel_reader_helper
+```
+
+​
 
 ### 1. 安装依赖
 
@@ -176,7 +183,7 @@ pip install PyQt5 PyQtWebEngine
 libGL error: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
 libGL error: failed to load driver: swrast
 
-**A**: 这个错误是因为程序需要 OpenGL 渲染环境和图形显示支持，但在当前环境（可能是无界面的服务器或容器）中不可用。解决方法是创建一个使用系统python pyqt的虚拟环境，具体使用方法见[说明文件](novel_reader_helper\VENV_README.md) ,并使用run_browser.sh启动阅读器。
+**A**: 这个错误是因为程序需要 OpenGL 渲染环境和图形显示支持，但在当前环境（可能是无界面的服务器或容器）中不可用。解决方法是创建一个使用系统python pyqt的虚拟环境，具体使用方法见[说明文件](VENV_README.md) ,并使用run_browser.sh启动阅读器。
 
 ## 开发计划
 
