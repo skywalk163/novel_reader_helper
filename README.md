@@ -39,13 +39,13 @@
 
 ## 快速开始
 先下载源代码
+
 ​```bash
 git clone https://gitcode.com/skywalk163/novel_reader_helper
 cd novel_reader_helper
 ```
 
 ​
-
 ### 1. 安装依赖
 
 您可以选择快速安装（不包含OCR功能）或完整安装：
