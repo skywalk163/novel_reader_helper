@@ -98,7 +98,7 @@ class NovelBrowser(QMainWindow):
     closed = pyqtSignal()  # 窗口关闭信号
     
     def __init__(self, parent=None):
-        super().__init__(parent)
+        QMainWindow.__init__(self, parent)
         
         if not PYQT_AVAILABLE:
             raise ImportError(f"PyQt5/PyQtWebEngine 不可用: {PYQT_ERROR}")
@@ -139,6 +139,17 @@ class NovelBrowser(QMainWindow):
         
         # 存储最后提取的内容，用于AI总结
         self.last_extracted_content = None
+        
+        # 初始化AI配置管理器
+        try:
+            from config import get_config_manager
+            self.ai_config_manager = get_config_manager()
+            self.ai_config_available = True
+            print(f"✅ AI配置管理器初始化成功: {type(self.ai_config_manager)}")
+        except Exception as e:
+            print(f"AI配置模块不可用: {e}")
+            self.ai_config_manager = None
+            self.ai_config_available = False
         
         # 初始化UI
         self.setup_ui()
@@ -238,6 +249,10 @@ class NovelBrowser(QMainWindow):
         self.ai_summary_action = QAction("📝 AI总结", self)
         self.ai_summary_action.triggered.connect(self.ai_summarize_content)
         
+        # 添加"AI配置"按钮
+        self.ai_config_action = QAction("⚙️ AI配置", self)
+        self.ai_config_action.triggered.connect(self.show_ai_config_dialog)
+        
         # 创建工具栏并添加动作
         self.toolbar = self.addToolBar("Navigation")
         self.toolbar.addAction(self.back_action)
@@ -249,6 +264,7 @@ class NovelBrowser(QMainWindow):
         self.toolbar.addAction(self.extract_content_action)
         self.toolbar.addAction(self.ocr_images_action)
         self.toolbar.addAction(self.ai_summary_action)
+        self.toolbar.addAction(self.ai_config_action)
         
         # 小说网站快捷按钮
         self.site_actions = []
@@ -264,6 +280,7 @@ class NovelBrowser(QMainWindow):
             action.triggered.connect(lambda checked, u=url: self.load_url(u))
             self.site_actions.append(action)
             self.toolbar.addAction(action)
+    
     def create_address_bar(self):
         """创建地址栏和导航区域"""
         # 创建顶部地址栏区域容器
@@ -1285,8 +1302,33 @@ class NovelBrowser(QMainWindow):
         self.ai_summary_action.setEnabled(False)
         
         try:
-            # 调用AI总结功能
-            summary = self.generate_summary(text, title)
+            summary = ""
+            
+            # 优先尝试使用AI模型
+            if self.ai_config_available and self.ai_config_manager:
+                default_model = self.ai_config_manager.get_default_model()
+                if default_model:
+                    try:
+                        self.status_label.setText("正在使用AI模型进行智能总结...")
+                        summary = self.ai_summarize_with_model(text, default_model)
+                        
+                        # 如果AI总结失败，检查是否需要回退
+                        if summary.startswith("❌"):
+                            # AI总结失败，回退到规则总结
+                            self.status_label.setText("AI总结失败，回退到规则总结...")
+                            summary = self.fallback_to_rule_summary(text, title)
+                    except Exception as e:
+                        print(f"AI模型总结异常: {e}")
+                        self.status_label.setText("AI模型异常，回退到规则总结...")
+                        summary = self.fallback_to_rule_summary(text, title)
+                else:
+                    # 没有配置默认模型，使用规则总结
+                    self.status_label.setText("未配置默认AI模型，使用规则总结...")
+                    summary = self.fallback_to_rule_summary(text, title)
+            else:
+                # AI配置不可用，使用规则总结
+                self.status_label.setText("AI配置不可用，使用规则总结...")
+                summary = self.fallback_to_rule_summary(text, title)
             
             # 显示总结结果
             self.display_summary(summary, title)
@@ -1572,6 +1614,104 @@ class NovelBrowser(QMainWindow):
                 self.status_label.setText(f"✅ 总结已保存")
             except Exception as e:
                 self.show_error(f"保存失败: {str(e)}")
+    def show_ai_config_dialog(self):
+        """显示AI配置对话框"""
+        print("🔧 DEBUG: 开始打开AI配置对话框")
+        try:
+            print("🔧 DEBUG: 尝试导入AIConfigDialog...")
+            from ui.ai_config_dialog import AIConfigDialog
+            print("🔧 DEBUG: AIConfigDialog导入成功")
+            
+            print("🔧 DEBUG: 尝试创建AIConfigDialog实例...")
+            dialog = AIConfigDialog(self)
+            print("🔧 DEBUG: AIConfigDialog实例创建成功")
+            
+            print("🔧 DEBUG: 尝试显示对话框...")
+            dialog.exec_()
+            print("🔧 DEBUG: 对话框显示完成")
+            
+        except ImportError as e:
+            print(f"🔧 DEBUG: 导入错误: {e}")
+            self.show_error(f"无法打开AI配置界面: {e}")
+        except Exception as e:
+            print(f"🔧 DEBUG: 其他错误: {e}")
+            import traceback
+            traceback.print_exc()
+            self.show_error(f"打开AI配置时发生错误: {str(e)}")
+    
+    def ai_summarize_with_model(self, text: str, model_config) -> str:
+        """使用指定AI模型进行总结
+        
+        Args:
+            text: 要总结的文本
+            model_config: AI模型配置
+            
+        Returns:
+            总结内容
+        """
+        try:
+            from config.ai_client import AIModelManager
+            
+            # 调用AI模型进行总结
+            result = AIModelManager.generate_summary(model_config, text)
+            
+            if result.success:
+                # 构建增强的总结结果
+                summary_parts = []
+                summary_parts.append("=" * 60)
+                summary_parts.append(f"🤖 AI智能总结 - {model_config.name}")
+                summary_parts.append("=" * 60)
+                summary_parts.append("")
+                
+                # AI总结内容
+                summary_parts.append(result.content)
+                summary_parts.append("")
+                
+                # 技术信息
+                summary_parts.append("📊 技术信息：")
+                summary_parts.append(f"  • AI模型: {result.model}")
+                summary_parts.append(f"  • 响应时间: {result.response_time:.2f}秒")
+                
+                if result.usage:
+                    usage_info = []
+                    if 'prompt_tokens' in result.usage:
+                        usage_info.append(f"提示词: {result.usage['prompt_tokens']}")
+                    if 'completion_tokens' in result.usage:
+                        usage_info.append(f"生成: {result.usage['completion_tokens']}")
+                    if 'total_tokens' in result.usage:
+                        usage_info.append(f"总计: {result.usage['total_tokens']}")
+                    
+                    if usage_info:
+                        summary_parts.append(f"  • Token使用: {' | '.join(usage_info)}")
+                
+                summary_parts.append("")
+                summary_parts.append("=" * 60)
+                summary_parts.append("💡 这是基于AI模型的智能总结，相比规则总结更加准确和智能")
+                summary_parts.append("=" * 60)
+                
+                return '\n'.join(summary_parts)
+            else:
+                # AI调用失败，返回错误信息
+                error_summary = f"❌ AI总结失败\n\n错误信息: {result.error_message}\n\n将回退到规则总结方式..."
+                return error_summary
+                
+        except Exception as e:
+            # 异常情况，返回错误信息
+            error_summary = f"❌ AI总结出现异常\n\n错误信息: {str(e)}\n\n将回退到规则总结方式..."
+            return error_summary
+    
+    def fallback_to_rule_summary(self, text: str, title: str) -> str:
+        """回退到基于规则的总结方式
+        
+        Args:
+            text: 要总结的文本
+            title: 文本标题
+            
+        Returns:
+            规则总结内容
+        """
+        # 调用原有的总结方法
+        return self.generate_summary(text, title)
 
 
 # 全局QApplication实例
